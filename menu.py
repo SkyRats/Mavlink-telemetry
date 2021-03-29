@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from transfer import client
+from telemetry import client
 import asyncio
 
 if __name__ == "__main__":
