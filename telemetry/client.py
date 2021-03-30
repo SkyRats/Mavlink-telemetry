@@ -1,24 +1,50 @@
 #!/usr/bin/env python3
 
+from __future__ import print_function
+import sys, select
+import termios
+from timeit import default_timer as timer
+from argparse import ArgumentParser
+
 import asyncio
 from mavsdk import System
 
-async def connect_(system):
+try:
+    from pymavlink import mavutil
+except ImportError as e:
+    print("Failed to import pymavlink: " + str(e))
+    print("")
+    print("You may need to install it with:")
+    print("    pip3 install --user pymavlink")
+    print("")
+    sys.exit(1)
 
-  print("Connecting a drone...")
-  print("\tConnection URL format should be: ")
-  print("\tFor TCP : tcp://:[server_host][:server_port]")
-  print("\tFor UDP : udp://[bind_host][:bind_port]")
-  print("\tFor Serial : serial:///path/to/serial/dev[:baudrate]")
-  url = "udp://:14550"
+try:
+    import serial
+except ImportError as e:
+    print("Failed to import pyserial: " + str(e))
+    print("")
+    print("You may need to install it with:")
+    print("    pip3 install --user pyserial")
+    print("")
+    sys.exit(1)
 
-  await system.connect(system_address="udp://:14550")
-  print("Waiting for drone to connect...")
 
-  async for state in system.core.connection_state():
-    if state.is_connected:
-      print(f"Drone discovered with UUID: {state.uuid}")
-      break
+async def connect_():
+  print("Connecting to the drone...")
+  mav = mavutil.mavlink_connection("/dev/ttyUSB0", autoreconnect=True, baud=57600)
+  print("Drone is connected!")
+  print()
+  return mav
+
+def test_connection(mav):
+  print(mav.wait_heartbeat())
+
+def list_directory_(mav, path):
+  #print(dir(mav))
+  mav.
+
+  '''
 
 def download_(system ,remote_file_path, local_path):
   print("Download file: " + remote_file_path + "to " + local_path)
@@ -38,3 +64,4 @@ async def list_directory_(system, remote_dir):
 async def reset_(system):
   print("Reseting the remote server...")
   await system.ftp.reset()
+'''
