@@ -41,8 +41,8 @@ def test_connection(mav):
   print(mav.wait_heartbeat())
 
 def list_directory_(mav, path):
-  #print(dir(mav))
-  mav.
+  print(dir(mav))
+  mav.recv_match()
 
   '''
 
